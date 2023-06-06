@@ -1,0 +1,109 @@
+﻿@model bleemsMVC.Models.Product
+
+
+<div class="card card-info">
+    <div class="card-header">
+        <h3 class="card-title"> Edit Product Data </h3>
+    </div>
+    <div class="card-body">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+
+
+
+
+
+            <div class="row">
+                <div class="row">
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label asp-for="Name" class="control-label"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+
+
+
+
+                      
+                      
+                      
+
+                    </div>
+
+
+
+
+                    <div class="col-2">
+                        <div class="form-group">
+                            <label asp-for="Description" class="control-label"></label>
+                            <input asp-for="Description" class="form-control" />
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                    </div>
+
+
+
+
+                    <div class="col-2">
+                          <div class="form-group">
+                            <label asp-for="Price" class="control-label"></label>
+                            <input asp-for="Price" class="form-control" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                          <div class="form-group">
+                            <label asp-for="Photo" class="control-label"></label>
+                            <input asp-for="Photo" class="form-control" />
+                            <span asp-validation-for="Photo" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                          <div class="form-group">
+                            <label asp-for="CategoryId" class="control-label"></label>
+                            <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId">
+                            <option value="">-- Select --</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    
+
+                </div>
+
+
+            </div>
+          
+
+
+            <div class="row">
+
+                  <div class="col-12">
+                     <div class="form-group">
+                    <input type="submit" value="Update" class="btn btn-primary  btn-block" />
+                </div>
+
+                </div>
+
+
+            </div>
+
+        </form>
+
+
+
+
+    </div>
+
+
+</div>
+ 
+
+<br />
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

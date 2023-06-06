@@ -1,0 +1,237 @@
+﻿@model IEnumerable<bleemsMVC.Models.Product>
+
+
+
+@{
+    ViewData["Title"] = "Products";
+
+    Product product = new Product();
+}
+
+@{
+    // Populate the dropdown options
+    List<int> years = new List<int> { 2020, 2021, 2022, 2023 };
+    List<int> months = Enumerable.Range(1, 12).ToList();
+    List<int> days = Enumerable.Range(1, 31).ToList();
+}
+
+<p>
+    <a href="#" class="btn btn-dark" onclick="showdivgmc()"><span class="input-group-addon"> <i class="fas fa-plus "></i></span> &nbsp; Add New Product </a>
+
+</p>
+
+
+<partial name="NewProduct" model="@product" />
+
+<!-- Filter dropdowns -->
+<div class="filters">
+    <form method="get" action="@Url.Action("Index")">
+        <div class="form-group">
+            <label for="selectedYear">Year:</label>
+            <select class="form-control" id="selectedYear" name="selectedYear">
+                <option value="">All</option>
+                @if (years != null)
+                {
+                    foreach (var year in years)
+                    {
+                        <option value="@year" selected="@(year == (int)ViewData["SelectedYear"])">@year</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="selectedMonth">Month:</label>
+            <select class="form-control" id="selectedMonth" name="selectedMonth">
+                <option value="">All</option>
+                @if (months != null)
+                {
+                    foreach (var month in months)
+                    {
+                        <option value="@month" selected="@(month == (int)ViewData["SelectedMonth"])">@month</option>
+                    }
+                }
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="selectedDay">Day:</label>
+            <select class="form-control" id="selectedDay" name="selectedDay">
+                <option value="">All</option>
+                @if (days != null)
+                {
+                    foreach (var day in days)
+                    {
+                        <option value="@day" selected="@(day == (int)ViewData["SelectedDay"])">@day</option>
+                    }
+                }
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Apply Filters</button>
+    </form>
+</div>
+
+
+<div class="modal fade" id="LicenseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+    <div class="modal-dialog modal-xl" modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title"> Products</h2>
+            </div>
+            <div class="modal-body" id="LicenseModalBodyDiv">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+            </div>
+
+            <div class="card-body">
+                <table class=" table table-bordered  display" id="producttable" name="producttable">
+                    <thead class="btn-dark">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Name)
+                            </th>
+
+                            <th>
+                                @Html.DisplayNameFor(model => model.Price)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Photo)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.DateAdded)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Category)
+                            </th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Name)
+                                </td>
+
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Price)
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.Photo))
+                                    {
+                                        <img src="@item.Photo" alt="Photo" />
+                                    }
+                                    else
+                                    {
+                                        <span>No photo available</span>
+                                    }
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.DateAdded)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                                </td>
+                                <td>
+                                    <a style="height:40px;width:40px" href="#" class="btn btn-info" onclick="Edit(@item.Id)" data-toggle="tooltip" data-placement="bottom" title="Edit">    <i class="fa-solid fa-pencil"></i></a>
+                                    <a style="height:40px;width:40px" href="#" class="btn btn-danger" onclick="Delete(@item.Id)" data-toggle="tooltip" data-placement="bottom" title="Delete">    <i class="fa-solid fa-trash"></i></a>
+
+                                    @* <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+
+                                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>*@
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+</div>
+
+
+
+
+<script>
+
+    $(document).ready(function() {
+        //USING datatable.net library
+
+
+        $('#producttable').DataTable();
+
+
+    });
+
+
+
+    var showdivgmc = function() {
+        hiddivadd.style.display = 'inline';
+
+    };
+
+
+
+    var Delete = function(ID) {
+
+
+        $.ajax({
+
+
+            url: '/Products/Delete',
+            data: { id: ID },
+            success:
+                function(response) {
+                    $("#LicenseModalBodyDiv").html(response);
+                    $("#LicenseModal").modal("show");
+
+                },
+            error:
+                function(response) {
+                    alert("Error: " + response);
+                }
+        });
+    }
+
+    var Edit = function(ID) {
+
+
+        $.ajax({
+
+
+            url: '/Products/Edit',
+            data: { id: ID },
+            success:
+                function(response) {
+                    $("#LicenseModalBodyDiv").html(response);
+                    $("#LicenseModal").modal("show");
+
+                },
+            error:
+                function(response) {
+                    alert("Error: " + response);
+                }
+        });
+    }
+
+
+
+
+</script>

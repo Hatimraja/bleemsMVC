@@ -1,0 +1,151 @@
+﻿@model IEnumerable<bleemsMVC.Models.Category>
+
+@{
+    ViewData["Title"] = "Categories";
+
+     Category category = new Category();
+
+}
+
+
+<p>
+    <a href="#" class="btn btn-dark" onclick="showdivgmc()"><span class="input-group-addon"> <i class="fas fa-plus "></i></span> &nbsp; Add New Category </a>
+
+</p>
+
+
+<partial name="NewCategory" model="@category" />
+
+
+
+<div class="modal fade" id="LicenseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalScrollableTitle" aria-hidden="true">
+    <div class="modal-dialog modal-xl" modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title"> Categories</h2>
+            </div>
+            <div class="modal-body" id="LicenseModalBodyDiv">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+            </div>
+
+            <div class="card-body">
+                <table class=" table table-bordered  display" id="categoryTable" name="categoryTable">
+                    <thead class="btn-dark">
+                        <tr>
+                            <th>
+                                @Html.DisplayNameFor(model => model.CategoryName)
+                            </th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.CategoryName)
+                                </td>
+                                <td>
+
+
+                                     <a style="height:40px;width:40px" href="#" class="btn btn-info" onclick="Edit(@item.Id)" data-toggle="tooltip" data-placement="bottom" title="Edit">    <i class="fa-solid fa-pencil"></i></a>
+                                     <a style="height:40px;width:40px" href="#" class="btn btn-danger" onclick="Delete(@item.Id)" data-toggle="tooltip" data-placement="bottom" title="Delete">    <i class="fa-solid fa-trash"></i></a>
+
+
+                                    
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+</div>
+
+
+
+
+
+
+
+<script>
+
+    $(document).ready(function() {
+        //USING datatable.net library
+        $('#categoryTable').DataTable();
+    });
+
+
+
+    var showdivgmc = function() {
+        hiddivadd.style.display = 'inline';
+
+    };
+
+
+
+    var Delete = function(ID) {
+
+       
+        $.ajax({
+              
+
+            url: '/Categories/Delete',
+            data: { id: ID },
+            success:
+                function(response) {
+                    $("#LicenseModalBodyDiv").html(response);
+                    $("#LicenseModal").modal("show");
+
+                },
+            error:
+                function(response) {
+                    alert("Error: " + response);
+                }
+        });
+    }
+   
+     var Edit = function(ID) {
+
+       
+        $.ajax({
+              
+
+            url: '/Categories/Edit',
+            data: { id: ID },
+            success:
+                function(response) {
+                    $("#LicenseModalBodyDiv").html(response);
+                    $("#LicenseModal").modal("show");
+
+                },
+            error:
+                function(response) {
+                    alert("Error: " + response);
+                }
+        });
+    }
+
+</script>
